@@ -1,0 +1,36 @@
+Your salary of ₹120,000 has been credited to account XXXX1234 from Your Company. Ref: DEC-001
+Debit of ₹5,000 made at Big Bazaar for Groceries. Balance: ₹145,320. Thank you!
+EMI of ₹8,000 for your car loan has been debited from account XXXX1234. Next EMI due: 05-Feb-2024
+Mutual Fund SIP of ₹10,000 has been successfully invested in HDFC Growth Fund. Units: 45.32
+Debit of ₹2,500 for Electricity Bill payment. Reference: BILL-001234
+Insurance premium of ₹1,500 received for your health insurance policy. Valid till: 31-Dec-2024
+Debit of ₹2,000 at Pizza Hut restaurant. Card ending with 1234
+Rent payment of ₹15,000 transferred to owner account successfully. Reference: RENT-JAN-2024
+Amazon purchase of ₹3,000 for Electronics. Order ID: AMZ-789456
+Your bonus of ₹50,000 has been credited. Happy New Year!
+FD Interest of ₹1,200 credited to your savings account. Annual rate: 5.5%
+Your salary of ₹120,000 has been credited to account XXXX1234 from Your Company. Ref: JAN-001
+Debit of ₹4,500 at D-Mart supermarket. Balance: ₹135,820
+EMI of ₹8,000 for your car loan has been debited. Next EMI due: 05-Mar-2024
+Mutual Fund SIP of ₹10,000 invested in HDFC Growth Fund. Units: 44.89
+Internet and phone bill of ₹1,000 has been debited. Service active till: 28-Feb-2024
+Health insurance premium of ₹2,000 received and confirmed. Coverage active till: 31-Jan-2025
+Debit of ₹1,500 at Café Coffee Day. Card balance: ₹118,320
+Rent payment of ₹15,000 transferred successfully. Reference: RENT-FEB-2024
+Monthly gym membership of ₹1,500 has been charged. Membership active till: 28-Feb-2024
+Water bill of ₹800 debited. Reference: WATER-FEB-2024
+Your salary of ₹120,000 has been credited from Your Company. Ref: FEB-001
+EMI of ₹8,000 for your car loan has been debited. Next EMI due: 05-Apr-2024
+Mutual Fund SIP of ₹10,000 invested in Axis Bluechip Fund. Units: 46.12
+Debit of ₹5,500 at Big Bazaar groceries. Transaction ID: BBZ-234567
+Car insurance premium of ₹2,000 received. Coverage valid till: 31-Mar-2024
+Uber ride of ₹1,000 debited. Journey: Office to Home
+Rent payment of ₹15,000 transferred successfully. Reference: RENT-MAR-2024
+Travel booking of ₹5,000 via MakeMyTrip. Trip to Goa, 15-20 March
+Your salary of ₹120,000 has been credited from Your Company. Ref: MAR-001
+EMI of ₹8,000 for your car loan has been debited. Next EMI due: 05-May-2024
+Mutual Fund SIP of ₹10,000 invested in HDFC Equity Fund. Units: 45.67
+Debit of ₹6,000 at Big Bazaar household items. Transaction ID: BBZ-345678
+Medical checkup bill of ₹3,000 paid at Apollo Hospital. Ref: MED-234567
+Rent payment of ₹15,000 transferred successfully. Reference: RENT-APR-2024
+Stock purchase of ₹2,000 via Zerodha. Broker charges: ₹20

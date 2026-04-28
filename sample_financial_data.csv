@@ -1,0 +1,37 @@
+date,description,amount,type,category
+2024-01-01,Monthly Salary,120000,income,salary
+2024-01-03,Grocery Shopping,5000,expense,living
+2024-01-05,EMI Payment - Car,8000,expense,emi
+2024-01-07,Mutual Fund SIP,10000,investment,sip
+2024-01-10,Power Bill,2500,expense,living
+2024-01-12,Insurance Premium,1500,expense,insurance
+2024-01-15,Restaurant Dining,2000,expense,discretionary
+2024-01-18,Rent Payment,15000,expense,rent
+2024-01-20,Amazon Purchase,3000,expense,discretionary
+2024-01-22,Salary Bonus,50000,income,bonus
+2024-01-25,Fixed Deposit Interest,1200,income,other_income
+2024-02-01,Monthly Salary,120000,income,salary
+2024-02-03,Supermarket,4500,expense,living
+2024-02-05,EMI Payment - Car,8000,expense,emi
+2024-02-07,Mutual Fund SIP,10000,investment,sip
+2024-02-10,Internet & Phone,1000,expense,living
+2024-02-12,Health Insurance,2000,expense,insurance
+2024-02-15,Movie & Entertainment,1500,expense,discretionary
+2024-02-18,Rent Payment,15000,expense,rent
+2024-02-20,Gym Membership,1500,expense,discretionary
+2024-02-25,Water Bill,800,expense,living
+2024-03-01,Monthly Salary,120000,income,salary
+2024-03-05,EMI Payment - Car,8000,expense,emi
+2024-03-07,Mutual Fund SIP,10000,investment,sip
+2024-03-10,Groceries,5500,expense,living
+2024-03-12,Car Insurance,2000,expense,insurance
+2024-03-15,Uber/Taxi,1000,expense,discretionary
+2024-03-18,Rent Payment,15000,expense,rent
+2024-03-20,Travel Expenses,5000,expense,discretionary
+2024-04-01,Monthly Salary,120000,income,salary
+2024-04-05,EMI Payment - Car,8000,expense,emi
+2024-04-07,Mutual Fund SIP,10000,investment,sip
+2024-04-10,Household Shopping,6000,expense,living
+2024-04-12,Medical Checkup,3000,expense,other
+2024-04-18,Rent Payment,15000,expense,rent
+2024-04-25,Zerodha Trading,2000,investment,sip

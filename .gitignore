@@ -1,0 +1,19 @@
+# Python
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+
+# React / Node
+node_modules/
+financial-twin/node_modules/
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+
+# OS / editor
+.DS_Store
+.vscode/
