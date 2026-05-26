@@ -86,7 +86,10 @@ def run_simulation(profile: UserProfile) -> SimulationResult:
         recommendations=recommendations,
         explainability=explainability,
         assumptions=assumptions,
-        debug_info=debug_trace
+        debug_info={
+            **(debug_trace or {}),
+            "generated_at": datetime.datetime.utcnow().isoformat()
+        }
     )
     
     return result

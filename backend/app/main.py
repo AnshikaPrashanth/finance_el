@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.routes import users, simulation, results, sync, market
+from app.api.routes import users, simulation, results, sync, market, twin
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -33,6 +33,7 @@ app.include_router(simulation.router, prefix=settings.API_V1_STR, tags=["simulat
 app.include_router(results.router, prefix=settings.API_V1_STR, tags=["results"])
 app.include_router(sync.router, prefix=settings.API_V1_STR, tags=["sync"])
 app.include_router(market.router, prefix=settings.API_V1_STR, tags=["market"])
+app.include_router(twin.router, prefix=settings.API_V1_STR, tags=["twin"])
 
 @app.get("/")
 def root():

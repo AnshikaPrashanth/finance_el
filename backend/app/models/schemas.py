@@ -178,6 +178,9 @@ class SimulationResult(BaseModel):
     explainability: Explainability
     assumptions: AssumptionVersions
     debug_info: Optional[Dict[str, Any]] = None
+    user_id: Optional[str] = None
+    stress_test: Optional[Dict[str, Any]] = None
+    history: List[Dict[str, Any]] = Field(default_factory=list)
 
 # Data Sync Related Schemas
 class SyncDetected(BaseModel):
@@ -234,3 +237,71 @@ class RecommendationItem(BaseModel):
     impact: str  # 'high', 'medium', 'low'
     category: str  # 'debt', 'emergency_fund', 'investment', 'taxes', 'liquidity'
     action: str
+
+
+class TwinRunRequest(BaseModel):
+    user_id: Optional[str] = None
+    profile: UserProfile
+
+
+class FinancialHistoryEntry(BaseModel):
+    record_id: str
+    user_id: str
+    timestamp: str
+    simulation_id: str
+    profile: UserProfile
+    metrics: Dict[str, Any] = Field(default_factory=dict)
+
+
+class FinancialHistoryResponse(BaseModel):
+    user_id: str
+    entries: List[FinancialHistoryEntry]
+
+
+class TransactionEvent(BaseModel):
+    id: str
+    user_id: str
+    timestamp: str
+    description: str
+    amount: float
+    category: str
+    transaction_type: str  # 'income', 'expense', 'investment', 'debt_payment', 'emergency', 'asset_update'
+    source: str  # 'live_simulator', 'sms', 'csv', 'manual'
+    is_recurring: bool = False
+    metadata: Optional[Dict[str, Any]] = None
+
+
+class TransactionEventCreate(BaseModel):
+    description: str
+    amount: float
+    category: str
+    transaction_type: str
+    source: str
+    is_recurring: bool = False
+    metadata: Optional[Dict[str, Any]] = None
+
+
+class DriftItem(BaseModel):
+    metric: str
+    planned: float
+    actual: float
+    variance: float
+    status: str  # 'on_track', 'warning', 'critical'
+    description: str
+
+
+class DriftReport(BaseModel):
+    items: List[DriftItem]
+    overall_status: str
+
+
+class TransactionResponse(BaseModel):
+    transaction: TransactionEvent
+    updated_profile: UserProfile
+    updated_metrics: Metrics
+    simulation_result: SimulationResult
+    drift_report: DriftReport
+    alerts: List[str]
+    recommendations: List[Dict[str, Any]]
+    recent_transactions: List[TransactionEvent]
+

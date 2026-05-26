@@ -115,6 +115,72 @@ export async function runFullSimulation(formData, onStepChange) {
   return results;
 }
 
+export async function runTwinAnalysis(formData, existingUserId, onStepChange) {
+  onStepChange("Saving your financial twin...");
+  const profile = buildUserProfile(formData);
+  const payload = existingUserId ? { user_id: existingUserId, profile } : { profile };
+  try {
+    const { data } = await client.post("/api/v1/twin/run", payload);
+    return data;
+  } catch (err) {
+    throw normalizeError(err);
+  }
+}
+
+export async function getLatestTwin(userId) {
+  try {
+    const { data } = await client.get(`/api/v1/twin/${userId}/latest`);
+    return data;
+  } catch (err) {
+    throw normalizeError(err);
+  }
+}
+
+export async function getFinancialHistory(userId) {
+  try {
+    const { data } = await client.get(`/api/v1/twin/${userId}/history`);
+    return data;
+  } catch (err) {
+    throw normalizeError(err);
+  }
+}
+
+export async function postTransaction(userId, transaction) {
+  try {
+    const { data } = await client.post(`/api/v1/twin/${userId}/transaction`, transaction);
+    return data;
+  } catch (err) {
+    throw normalizeError(err);
+  }
+}
+
+export async function getTransactions(userId) {
+  try {
+    const { data } = await client.get(`/api/v1/twin/${userId}/transactions`);
+    return data;
+  } catch (err) {
+    throw normalizeError(err);
+  }
+}
+
+export async function getLatestTwinState(userId) {
+  try {
+    const { data } = await client.get(`/api/v1/twin/${userId}/latest-state`);
+    return data;
+  } catch (err) {
+    throw normalizeError(err);
+  }
+}
+
+export async function simulateLiveEvent(userId) {
+  try {
+    const { data } = await client.post(`/api/v1/twin/${userId}/simulate-live-event`);
+    return data;
+  } catch (err) {
+    throw normalizeError(err);
+  }
+}
+
 /** Build the complete UserProfile request body from form data to match backend schema */
 function buildUserProfile(formData) {
   const { personal, income, expenses, assets, liabilities, preferences } = formData;

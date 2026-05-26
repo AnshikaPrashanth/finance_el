@@ -4,7 +4,7 @@ import Dashboard from "../components/Dashboard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorState from "../components/ErrorState";
 import DataSyncPanel from "../components/DataSyncPanel";
-import { runFullSimulation } from "../services/api";
+import { runTwinAnalysis } from "../services/api";
 import { transformResults, generateFallbackScenarios } from "../utils/transformResults";
 import { TrendingUp, BarChart2 } from "lucide-react";
 
@@ -24,7 +24,7 @@ export default function Home() {
     setError(null);
 
     try {
-      const raw = await runFullSimulation(data, (msg) => setLoadingMsg(msg));
+      const raw = await runTwinAnalysis(data, null, (msg) => setLoadingMsg(msg));
       const normalized = transformResults(raw);
 
       // If backend didn't return scenarios, generate estimated fallbacks
@@ -123,8 +123,20 @@ export default function Home() {
         {view === VIEW.RESULTS && results && (
           <Dashboard
             results={results}
-            userName={formData?.personal?.fullName}
+            userName={formData?.personal?.fullName || (results.userSummary?.personal?.name) || "User"}
             formData={formData}
+            onTwinUpdate={(rawResult) => {
+              const normalized = transformResults(rawResult);
+              if (normalized) {
+                if (!normalized.scenarios?.length) {
+                  normalized.scenarios = generateFallbackScenarios(
+                    normalized.metrics,
+                    formData?.preferences
+                  );
+                }
+                setResults(normalized);
+              }
+            }}
           />
         )}
       </main>

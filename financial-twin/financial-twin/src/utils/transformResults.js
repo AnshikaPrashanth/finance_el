@@ -15,12 +15,23 @@ export function transformResults(raw) {
   if (!raw) return null;
 
   return {
+    userId: raw.user_id || null,
+    user_id: raw.user_id || null,
     metrics: transformMetrics(raw.metrics || raw),
     projections: transformProjections(raw.net_worth_projection || raw.projections || []),
     cashFlow: transformCashFlow(raw.cash_flow || raw.cashFlow || []),
     monteCarlo: transformMonteCarlo(raw.monte_carlo || raw.monteCarlo || {}),
     scenarios: transformScenarios(raw.scenarios || []),
     recommendations: raw.recommendations || [],
+    explainability: raw.explainability || null,
+    assumptions: raw.assumptions || null,
+    userSummary: raw.user_summary || null,
+    user_summary: raw.user_summary || null,
+    stressTest: raw.stress_test || null,
+    stress_test: raw.stress_test || null,
+    history: transformHistory(raw.history || []),
+    debugInfo: raw.debug_info || null,
+    debug_info: raw.debug_info || null,
   };
 }
 
@@ -111,6 +122,16 @@ function transformScenarios(arr) {
     realCorpus: s.projected_real_corpus ?? s.projectedRealCorpus ?? 0,
     successProb: s.success_probability ?? s.success_prob ?? s.successProb ?? s.probability ?? 0,
     changeVsBase: s.change_vs_base ?? s.changeVsBase ?? 0,
+  }));
+}
+
+function transformHistory(arr) {
+  return arr.map((entry) => ({
+    recordId: entry.record_id,
+    timestamp: entry.timestamp,
+    simulationId: entry.simulation_id,
+    metrics: entry.metrics || {},
+    profile: entry.profile || {},
   }));
 }
 

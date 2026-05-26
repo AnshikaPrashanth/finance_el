@@ -1,192 +1,115 @@
 # Personal Financial Digital Twin
 
-A production-ready fintech dashboard for personal financial planning, simulation, and PDF report generation.
+A fintech dashboard for personal financial planning, simulation, and PDF report generation.
 
 ---
 
 ## Project Structure
 
 ```
-src/
-├── components/
-│   ├── InputForm.jsx          # Multi-step financial input form
-│   ├── Dashboard.jsx          # Main results dashboard
-│   ├── MonteCarloChart.jsx    # Monte Carlo simulation chart (P5/P50/P95)
-│   ├── CashFlowChart.jsx      # Income vs Expenses timeline
-│   ├── ScenarioComparison.jsx # Strategy comparison bar chart
-│   ├── MetricsCards.jsx       # KPI summary cards
-│   ├── LoadingSpinner.jsx     # Animated loader
-│   ├── ErrorState.jsx         # Error display with retry
-│   └── ReportDownload.jsx     # PDF download button + logic
-├── pages/
-│   └── Home.jsx               # Main page orchestrator
-├── services/
-│   └── api.js                 # All API calls (createUser, simulate, getResults)
-├── utils/
-│   ├── formatters.js          # Currency, %, number formatters
-│   ├── validators.js          # Form validation helpers
-│   └── transformResults.js    # Backend → chart data transformers
-├── App.js
-└── index.js
+financial-twin/financial-twin/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── CashFlowChart.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── DataSyncPanel.jsx
+│   │   ├── ErrorState.jsx
+│   │   ├── InputForm.jsx
+│   │   ├── LoadingSpinner.jsx
+│   │   ├── MetricsCards.jsx
+│   │   ├── MonteCarloChart.jsx
+│   │   ├── ReportDownload.jsx
+│   │   └── ScenarioComparison.jsx
+│   ├── pages/
+│   │   └── Home.jsx
+│   ├── services/
+│   │   └── api.js
+│   ├── utils/
+│   │   ├── formatters.js
+│   │   ├── transformResults.js
+│   │   └── validators.js
+│   ├── App.js
+│   └── index.js
+├── package.json
+├── postcss.config.js
+├── tailwind.config.js
+└── README.md
 ```
 
 ---
 
 ## Completed Features
 
-- ✅ Multi-step input form with all personal/income/expense/asset/liability fields
-- ✅ Form validation (required, numeric, allocation must = 100%)
-- ✅ API service layer (createUser → simulate → getResults with polling)
-- ✅ Dashboard with KPI cards (net worth, health score, savings rate, etc.)
-- ✅ Net Worth / Wealth Projection line chart
-- ✅ Cash Flow chart (income vs expenses)
-- ✅ Monte Carlo simulation chart (percentile bands)
-- ✅ Scenario Comparison chart
-- ✅ Insights / Recommendations section
-- ✅ PDF report download (html2canvas + jsPDF)
-- ✅ Loading states, error states, retry logic
-- ✅ Local form persistence (localStorage)
-- ✅ Reset form
-- ✅ Responsive layout
-
----
-
-## Pending / Future Improvements
-
-- Backend-driven PDF with proper chart images (requires canvas serialization)
-- Authentication / multi-user support
-- Comparison of saved simulations
-- Dark mode toggle
-- Export to CSV
+- ✅ Multi-step financial input form with personal, income, expense, asset, liability, and preference fields
+- ✅ Form validation and allocation checks
+- ✅ Frontend service layer for `createUser`, `simulate`, and `getResults`
+- ✅ Dashboard summary cards and financial metrics
+- ✅ Wealth projection and Monte Carlo percentile charts
+- ✅ Cash flow timeline
+- ✅ Scenario comparison chart
+- ✅ PDF report generation using `jspdf` + `html2canvas`
+- ✅ Loading and error states with retry support
+- ✅ Local form persistence
+- ✅ Responsive UI
 
 ---
 
 ## How to Run
 
+From `financial-twin/financial-twin`:
+
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Copy env file
-cp .env.example .env
-
-# 3. Start dev server
 npm start
 ```
 
-Ensure your FastAPI backend is running at `http://localhost:8000`.
+Open the app in your browser at `http://localhost:3000`.
+
+> Optionally set `REACT_APP_API_BASE_URL` in a `.env` file to point to a different backend host.
+
+Ensure the FastAPI backend is running at `http://localhost:8000` or the URL configured in `REACT_APP_API_BASE_URL`.
 
 ---
 
 ## API Contract
 
-### POST /api/v1/create-user
-**Request:**
-```json
-{
-  "name": "string",
-  "age": 30,
-  "city": "string",
-  "marital_status": "single|married",
-  "dependents": 0
-}
-```
-**Response:**
-```json
-{ "user_id": "uuid-string" }
-```
+The frontend uses these backend endpoints:
 
-### POST /api/v1/simulate
-**Request:**
-```json
-{
-  "user_id": "uuid",
-  "income": { "salary": 100000, "bonus": 0, "side": 0, "rental": 0, "other": 0 },
-  "expenses": { "living": 40000, "emi": 0, "insurance": 0, "education": 0, "discretionary": 0, "other": 0 },
-  "assets": { "savings": 500000, "emergency_fund": 200000, "fd": 0, "stocks": 0, "mutual_funds": 0, "epf_ppf": 0, "gold": 0, "real_estate": 0, "business": 0, "other": 0 },
-  "liabilities": { "home_loan": 0, "personal_loan": 0, "credit_card": 0, "vehicle_loan": 0, "education_loan": 0, "other": 0 },
-  "preferences": {
-    "sip_amount": 10000,
-    "expected_return": 12,
-    "inflation": 6,
-    "risk_appetite": "moderate",
-    "investment_horizon": 20,
-    "target_corpus": 10000000,
-    "goal_type": "retirement",
-    "retirement_age": 60,
-    "equity_pct": 60,
-    "debt_pct": 30,
-    "gold_pct": 10
-  }
-}
-```
-**Response:**
-```json
-{ "simulation_id": "uuid-string", "status": "processing|complete" }
-```
+- `POST /api/v1/create-user` — create a new user profile
+- `POST /api/v1/simulate` — submit a simulation request
+- `GET /api/v1/results/{simulation_id}` — fetch simulation results
+- `POST /api/v1/sync/upload` — upload CSV/Excel financial data
+- `POST /api/v1/sync/sms` — sync SMS-derived financial data
+- `GET /api/v1/sync/status/{sync_id}` — query sync status
+- `GET /api/v1/market/assumptions` — retrieve default market assumptions
+- `POST /api/v1/market/assumptions` — request market assumptions with `use_live`
 
-### GET /api/v1/results/{simulation_id}
-**Response (assumed schema):**
-```json
-{
-  "status": "complete",
-  "metrics": {
-    "net_worth": 1500000,
-    "total_assets": 2000000,
-    "total_liabilities": 500000,
-    "savings_rate": 35.5,
-    "financial_health_score": 72,
-    "goal_success_probability": 68,
-    "projected_corpus": 25000000,
-    "emergency_fund_months": 5,
-    "monthly_surplus": 15000
-  },
-  "projections": [
-    { "year": 2024, "net_worth": 1500000, "corpus": 1500000 },
-    ...
-  ],
-  "cash_flow": [
-    { "month": "Jan 2024", "income": 100000, "expenses": 60000, "surplus": 40000 },
-    ...
-  ],
-  "monte_carlo": {
-    "p5": [...],
-    "p50": [...],
-    "p95": [...],
-    "years": [2024, 2025, ...]
-  },
-  "scenarios": [
-    { "name": "Current Plan", "corpus": 25000000, "success_prob": 68 },
-    { "name": "SIP +10%", "corpus": 28000000, "success_prob": 75 },
-    ...
-  ],
-  "recommendations": [
-    "Increase SIP by ₹2,000/month to stay on retirement track.",
-    "Emergency fund covers only 5 months; target 6+.",
-    ...
-  ]
-}
-```
+### Simulation Flow
 
-> **NOTE**: If your backend returns a different schema, update `src/utils/transformResults.js` — all data normalization happens there.
+The UI follows this sequence:
+1. `createUser(personalDetails)`
+2. `runSimulation({ user_id })`
+3. `pollUntilComplete(simulation_id)`
+
+### Payload shape
+
+The frontend builds a payload with:
+- `personal`
+- `income`
+- `expenses`
+- `assets`
+- `liabilities`
+- `investments`
+
+These values are normalized in `src/services/api.js` before sending to the backend.
 
 ---
 
-## PDF Generation
+## Notes
 
-Uses `jspdf` + `html2canvas`. The `ReportDownload` component:
-1. Captures the `#report-content` div with html2canvas
-2. Splits into A4 pages
-3. Saves as `financial-report.pdf`
-
-To improve chart quality in PDF, set `scale: 2` in html2canvas options.
-
----
-
-## Assumptions
-
-- Backend returns `simulation_id` immediately; results may be polled up to 30s
-- All monetary values are in INR (₹)
-- `financial_health_score` is 0–100
-- Monte Carlo returns arrays indexed by year
-- If backend doesn't return `scenarios`, `ScenarioComparison` renders empty state
+- `src/utils/transformResults.js` converts backend response payloads into chart-friendly data.
+- `src/services/api.js` centralizes backend communication and retry behavior.
+- Charts and results components depend on the backend response shape, so update the backend contract if the schema changes.
+- The app uses Tailwind classes in `src` and requires standard Create React App tooling from `package.json`.

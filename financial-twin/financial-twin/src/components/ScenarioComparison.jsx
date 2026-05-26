@@ -25,8 +25,8 @@ const CustomTooltip = ({ active, payload, label }) => {
           <span className="text-slate-100 font-medium">{formatCurrency(d?.corpus, true)}</span>
         </div>
         <div className="flex gap-3">
-          <span className="text-slate-400">Success Prob:</span>
-          <span className="text-brand-300 font-medium">{formatPercent(d?.successProb)}</span>
+          <span className="text-slate-400">Success Probability:</span>
+          <span className="text-brand-300 font-medium">{formatPercent(d?.successProb, 1, true)}</span>
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@ export default function ScenarioComparison({ scenarios }) {
               {formatCurrency(s.corpus, true)}
             </p>
             <p className="text-slate-500 font-body text-xs">
-              {formatPercent(s.successProb)} success
+              {formatPercent(s.successProb, 1, true)} success probability
             </p>
           </div>
         ))}

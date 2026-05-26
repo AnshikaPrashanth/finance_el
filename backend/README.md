@@ -1,88 +1,123 @@
 # Personal Financial Digital Twin - Backend
 
-This is the FastAPI backend for the academically rigorous Personal Financial Digital Twin application. It handles user profiles, complex financial metrics calculation, stochastic Monte Carlo simulations, and deterministic scenario generation.
+This repository contains the FastAPI backend for the Personal Financial Digital Twin application. It supports:
+- user profile storage,
+- financial simulation and Monte Carlo projections,
+- scenario results retrieval,
+- data sync from CSV/Excel upload and SMS payloads,
+- market assumption lookup.
 
-## Setup Instructions
+## Backend Structure
 
-1.  **Navigate to the backend directory:**
+```
+backend/
+├── app/
+│   ├── api/
+│   │   ├── routes/
+│   │   │   ├── market.py
+│   │   │   ├── results.py
+│   │   │   ├── simulation.py
+│   │   │   ├── sync.py
+│   │   │   └── users.py
+│   │   └── __init__.py
+│   ├── core/
+│   │   ├── config.py
+│   │   └── __init__.py
+│   ├── models/
+│   │   ├── schemas.py
+│   │   └── __init__.py
+│   ├── services/
+│   │   ├── assumptions_service.py
+│   │   ├── digital_twin_sync.py
+│   │   ├── excel_parser.py
+│   │   ├── explainability.py
+│   │   ├── financial_metrics.py
+│   │   ├── market_assumptions.py
+│   │   ├── market_data_service.py
+│   │   ├── monte_carlo.py
+│   │   ├── scenario_engine.py
+│   │   ├── simulation_engine.py
+│   │   ├── sms_parser.py
+│   │   ├── storage.py
+│   │   ├── tax_engine.py
+│   │   └── transaction_parser.py
+│   └── utils/
+│       └── helpers.py
+├── scripts/
+│   └── generate_synthetic_eval.py
+├── requirements.txt
+└── test_api.py
+```
+
+## Setup
+
+1. Open a terminal in the `backend` directory:
     ```bash
     cd backend
     ```
-
-2.  **Create a virtual environment:**
+2. Create a virtual environment:
     ```bash
     python -m venv venv
     ```
-
-3.  **Activate the virtual environment:**
-    - On Windows:
+3. Activate it:
+    - Windows:
       ```bash
       venv\Scripts\activate
       ```
-    - On macOS/Linux:
+    - macOS/Linux:
       ```bash
       source venv/bin/activate
       ```
-
-4.  **Install dependencies:**
+4. Install dependencies:
     ```bash
     pip install -r requirements.txt
     ```
 
-5.  **Run the application locally:**
-    ```bash
-    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-    ```
+## Run the Backend
 
-The backend will run on `http://localhost:8000`. API documentation is available at `http://localhost:8000/docs`.
-
-## Financial Model and Assumptions
-
-This engine employs several robust academic formulas to provide highly realistic long-term planning trajectories rather than simple geometric compounding:
-
-- **Net Worth**: `TotalAssets - TotalLiabilities`
-- **Future Value of SIP**: `SIP * [((1 + i)^n - 1) / i] * (1 + i)` where `i` is the monthly expected return and `n` is months.
-- **Real Returns & Inflation Drag**: The nominal projected corpus is discounted back to present value using the formula `real_corpus = nominal_corpus / (1 + inflation_rate)^years` to understand true purchasing power.
-- **Portfolio Math**: Expected portfolio return and volatility are computed via a weighted sum of underlying asset class assumptions (`w_i * r_i`), avoiding flat arbitrary estimates.
-- **Retirement Target Estimation**: If a user does not provide a target corpus, it is automatically computed using the "25x Rule" based on their essential expenses (`essential_expenses * 12 * 25`).
-
-## Tax Handling Strategy
-
-The system features a decoupled `tax_engine.py` that can operate in multiple modes:
-- **Current Tax Mode**: Evaluates income against current active tax slabs (e.g., India New Tax Regime FY25 estimator).
-- **Future Tax Mode**: Since future tax law is unknown, future simulations apply a simplified conservative or optimistic drag percentage, treating future taxes as assumptions rather than absolute truth.
-
-## Real-time Data Strategy
-
-Live market data integration is handled via `market_data_service.py`.
-- To avoid faking precision, live spot prices are **not** used to project 30-year returns.
-- Live data is intended for calibrating current benchmarks, while long-term simulations rely on configured actuarial/economic assumptions managed in `assumptions_service.py`.
-- Every simulation payload tracks assumption versions (e.g., `market_version`, `tax_version`) to guarantee reproducibility.
-
-## Nominal vs Real Outputs
-
-The system strictly differentiates between:
-- **Nominal Corpus**: The raw face value of wealth in the future.
-- **Real Corpus**: The inflation-adjusted purchasing power of that wealth today.
-Success probabilities and goal evaluations prioritize the **Real Corpus** to prevent "money illusion" (believing a large future nominal number is adequate when inflation has eroded its value).
-
-## Monte Carlo Methodology
-
-The stochastic simulation engine abandons simplistic terminal-wealth multipliers for a **step-by-step Markov-style projection**:
-- Uses **1000 trials** sampling returns via a log-normal/normal distribution: `sampled_return_t ~ Normal(mean_portfolio_return, portfolio_volatility^2)`.
-- Tracks both **real and nominal paths** independently inside the loop.
-- Outputs `p5`, `p50`, and `p95` percentile paths, as well as a strict `shortfall_probability` metric.
-
-## Limitations and Production Roadmap
-
-- **Covariance**: Currently, portfolio volatility assumes zero correlation across asset classes for simplicity. Adding a full covariance matrix is slated for v2.
-- **Tax Precision**: The current tax engine is an estimator, not compliance-grade accounting software. It ignores complex surcharges and cesses.
-- **Dynamic Rebalancing**: The simulation assumes a constant asset allocation and does not currently model dynamic glide paths (e.g., moving from 80% equity to 40% equity near retirement).
-
-## Synthetic Evaluation Tool
-
-For academic analysis or mass-testing, use the included evaluation script:
 ```bash
-python scripts/generate_synthetic_eval.py
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
-This will generate 20 randomized synthetic user profiles, process them through the simulation engine, and output a CSV (`evaluation_results.csv`) comparing the efficacy of the "Base" scenario versus dynamically improved scenarios.
+
+The API will be available at `http://localhost:8000`.
+OpenAPI docs are available at `http://localhost:8000/api/v1/openapi.json` and Swagger UI at `http://localhost:8000/docs`.
+
+## API Endpoints
+
+### General
+- `GET /` — basic health check/welcome message
+
+### User Management
+- `POST /api/v1/create-user` — create and persist a user profile
+
+### Simulation
+- `POST /api/v1/simulate` — run a financial simulation
+  - Accepts either `user_id` or full `profile`
+  - Returns `simulation_id` and `status`
+- `GET /api/v1/results/{simulation_id}` — fetch completed simulation results
+
+### Sync / Data Import
+- `POST /api/v1/sync/upload` — upload CSV/Excel financial data
+- `POST /api/v1/sync/sms` — sync financial data from SMS payloads
+- `GET /api/v1/sync/status/{sync_id}` — fetch sync status
+
+### Market Assumptions
+- `GET /api/v1/market/assumptions` — fallback/default assumptions
+- `POST /api/v1/market/assumptions` — request live or fallback assumptions
+
+## Testing
+
+A simple connectivity test is available at the repository root:
+
+```bash
+python test_api.py
+```
+
+This script submits a sample simulation payload to `http://localhost:8000/api/v1/simulate` and prints the response.
+
+## Notes
+
+- The backend uses CORS middleware to allow requests from the frontend.
+- The service layer is split across `app/services` for simulation, storage, parsing, and market assumptions.
+- `app/models/schemas.py` defines input/output validation for the API.
+- `scripts/generate_synthetic_eval.py` generates synthetic profiles and evaluates the simulation engine for batch testing.

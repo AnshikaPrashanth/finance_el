@@ -1,16 +1,38 @@
+const RUPEE = "\u20B9";
+const EMPTY = "-";
+
+function toFiniteNumber(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
+}
+
+function trimFixed(value, decimals = 1) {
+  const num = toFiniteNumber(value);
+  if (num === null) return EMPTY;
+  return Number(num.toFixed(decimals)).toString();
+}
+
+function compactRupees(value) {
+  const num = toFiniteNumber(value);
+  if (num === null) return EMPTY;
+
+  const sign = num < 0 ? "-" : "";
+  const abs = Math.abs(num);
+
+  if (abs >= 1_00_00_000) return `${sign}${RUPEE}${trimFixed(abs / 1_00_00_000, 2)}Cr`;
+  if (abs >= 1_00_000) return `${sign}${RUPEE}${trimFixed(abs / 1_00_000, 2)}L`;
+  if (abs >= 1_000) return `${sign}${RUPEE}${trimFixed(abs / 1_000, 1)}K`;
+  return `${sign}${RUPEE}${Math.round(abs).toLocaleString("en-IN")}`;
+}
+
 /**
  * Format a number as Indian Rupee currency.
- * e.g. 1500000 → "₹15,00,000"
  */
 export function formatCurrency(value, compact = false) {
-  if (value === null || value === undefined || isNaN(value)) return "—";
-  const num = Number(value);
-  if (compact) {
-    if (num >= 1_00_00_000) return `₹${Number((num / 1_00_00_000).toFixed(2))}Cr`;
-    if (num >= 1_00_000) return `₹${Number((num / 1_00_000).toFixed(2))}L`;
-    if (num >= 1_000) return `₹${Number((num / 1_000).toFixed(1))}K`;
-    return `₹${Math.round(num).toLocaleString("en-IN")}`;
-  }
+  const num = toFiniteNumber(value);
+  if (num === null) return EMPTY;
+  if (compact) return compactRupees(num);
+
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
@@ -20,47 +42,71 @@ export function formatCurrency(value, compact = false) {
 
 /**
  * Format a number as percentage.
- * e.g. 35.5 → "35.5%"
+ * Supports probabilities returned as ratios between 0 and 1.
  */
 export function formatPercent(value, decimals = 1, isProbability = false) {
-  if (value === null || value === undefined || isNaN(value)) return "—";
-  let num = Number(value);
-  // Backend returns success probability as a float 0.0 to 1.0
-  if (num <= 1 && num >= 0 && value !== 0 && value !== "0") {
-    num = num * 100;
-  }
-  if (isProbability && num >= 95) {
-    return "Very High (≈98%)";
-  }
-  return `${Number(num.toFixed(decimals))}%`;
+  const num = toFiniteNumber(value);
+  if (num === null) return EMPTY;
+
+  const percent = num >= 0 && num <= 1 ? num * 100 : num;
+  if (isProbability && percent <= 0) return "<1%";
+  if (isProbability && percent > 0 && percent < 1) return "<1%";
+  if (isProbability && percent >= 95) return "Very High (~98%)";
+  return `${trimFixed(percent, decimals)}%`;
 }
 
 /**
- * Format months string.
+ * Format month coverage with at most one decimal.
  */
 export function formatMonths(value) {
-  if (value === null || value === undefined || isNaN(value)) return "—";
-  return `${Number(Number(value).toFixed(1))} months`;
+  const num = toFiniteNumber(value);
+  if (num === null) return EMPTY;
+  return `${trimFixed(num, 1)} months`;
 }
 
 /**
- * Format plain number with locale separators.
+ * Format a plain number using Indian locale separators.
  */
-export function formatNumber(value) {
-  if (value === null || value === undefined || isNaN(value)) return "—";
-  return Number(value).toLocaleString("en-IN");
+export function formatNumber(value, decimals = 0) {
+  const num = toFiniteNumber(value);
+  if (num === null) return EMPTY;
+  return Number(num.toFixed(decimals)).toLocaleString("en-IN");
 }
 
 /**
- * Format a score out of 100 with label.
+ * Format a score out of 100.
+ */
+export function formatScore(value, decimals = 0) {
+  const num = toFiniteNumber(value);
+  if (num === null) return EMPTY;
+  return `${trimFixed(num, decimals)}/100`;
+}
+
+/**
+ * Label health score bands.
  */
 export function formatHealthScore(score) {
-  if (score === null || score === undefined) return { value: "—", label: "" };
-  const s = Number(score);
-  if (s >= 80) return { value: s, label: "Excellent" };
-  if (s >= 60) return { value: s, label: "Good" };
-  if (s >= 40) return { value: s, label: "Fair" };
-  return { value: s, label: "Needs Attention" };
+  const num = toFiniteNumber(score);
+  if (num === null) return { value: EMPTY, label: "" };
+  if (num >= 80) return { value: Math.round(num), label: "Excellent" };
+  if (num >= 65) return { value: Math.round(num), label: "Good" };
+  if (num >= 45) return { value: Math.round(num), label: "Stable" };
+  if (num >= 30) return { value: Math.round(num), label: "Needs Attention" };
+  return { value: Math.round(num), label: "High Risk" };
+}
+
+/**
+ * Format a transaction or action label from snake_case.
+ */
+export function formatActionLabel(value) {
+  if (!value) return "Review Plan";
+  return value
+    .split("_")
+    .map((part) => {
+      if (part.toLowerCase() === "sip") return "SIP";
+      return part.charAt(0).toUpperCase() + part.slice(1);
+    })
+    .join(" ");
 }
 
 /**
@@ -68,6 +114,7 @@ export function formatHealthScore(score) {
  */
 export function formatMonthYear(dateStr) {
   const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return EMPTY;
   return d.toLocaleDateString("en-IN", { month: "short", year: "numeric" });
 }
 
@@ -75,8 +122,5 @@ export function formatMonthYear(dateStr) {
  * Compact currency for chart axis ticks.
  */
 export function axisFormatter(value) {
-  if (value >= 1_00_00_000) return `₹${(value / 1_00_00_000).toFixed(1)}Cr`;
-  if (value >= 1_00_000) return `₹${(value / 1_00_000).toFixed(0)}L`;
-  if (value >= 1_000) return `₹${(value / 1_000).toFixed(0)}K`;
-  return `₹${value}`;
+  return compactRupees(value);
 }

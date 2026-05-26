@@ -5,31 +5,70 @@ import { validateForm, isStepValid } from "../utils/validators";
 // ─── Default form state ──────────────────────────────────────────────────────
 const DEFAULT_FORM = {
   personal: {
-    fullName: "Priya Sharma", age: "32", retirementAge: "60", city: "Bangalore", country: "India",
-    maritalStatus: "married", dependents: "1",
+    fullName: "Rahul Kumar",
+    age: "29",
+    retirementAge: "60",
+    city: "Chennai",
+    country: "India",
+    maritalStatus: "married",
+    dependents: "2",
   },
+
   income: {
-    salary: "120000", bonus: "100000", sideIncome: "0", rentalIncome: "0", otherIncome: "0",
+    salary: "55000",
+    bonus: "50000",
+    sideIncome: "3000",
+    rentalIncome: "0",
+    otherIncome: "0",
   },
+
   expenses: {
-    living: "45000", emi: "15000", insurance: "3000", education: "5000", discretionary: "10000", other: "0",
+    living: "25000",
+    emi: "10000",
+    insurance: "2500",
+    education: "3000",
+    discretionary: "5000",
+    other: "2000",
   },
+
   assets: {
-    savings: "150000", emergencyFund: "300000", fd: "200000", stocks: "400000", mutualFunds: "750000", epfPpf: "600000",
-    gold: "100000", realEstate: "0", business: "0", otherAssets: "0",
+    savings: "80000",
+    emergencyFund: "150000",
+    fd: "100000",
+    stocks: "50000",
+    mutualFunds: "200000",
+    epfPpf: "250000",
+    gold: "75000",
+    realEstate: "0",
+    business: "0",
+    otherAssets: "0",
   },
+
   liabilities: {
-    homeLoan: "0", personalLoan: "0", creditCard: "15000", vehicleLoan: "400000", educationLoan: "0",
+    homeLoan: "0",
+    personalLoan: "50000",
+    creditCard: "10000",
+    vehicleLoan: "250000",
+    educationLoan: "0",
     otherLiabilities: "0",
   },
+
   preferences: {
-    sipAmount: "25000", expectedReturn: "12", inflation: "6", riskAppetite: "moderate",
-    investmentHorizon: "28", targetCorpus: "40000000", goalType: "retirement",
-    equityPct: "60", debtPct: "30", goldPct: "10",
-    insuranceCoverage: "10000000",
+    sipAmount: "8000",
+    expectedReturn: "11",
+    inflation: "6",
+    riskAppetite: "moderate",
+    investmentHorizon: "25",
+    targetCorpus: "25000000",
+    goalType: "retirement",
+
+    equityPct: "50",
+    debtPct: "40",
+    goldPct: "10",
+
+    insuranceCoverage: "5000000",
   },
 };
-
 const STEPS = [
   { id: "personal", label: "Personal", icon: "👤" },
   { id: "income", label: "Income", icon: "💰" },
@@ -296,19 +335,7 @@ function mergeInitialData(defaultForm, syncData) {
 export default function InputForm({ onSubmit, isSubmitting, submitLabel = "Run Simulation", initialData = null }) {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState(() => {
-    try {
-      const saved = localStorage.getItem("fin_twin_form");
-      let formData = saved ? JSON.parse(saved) : DEFAULT_FORM;
-      
-      // Merge initialData if provided
-      if (initialData) {
-        formData = mergeInitialData(formData, initialData);
-      }
-      
-      return formData;
-    } catch {
-      return initialData ? mergeInitialData(DEFAULT_FORM, initialData) : DEFAULT_FORM;
-    }
+    return initialData ? mergeInitialData(DEFAULT_FORM, initialData) : DEFAULT_FORM;
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState(false);
