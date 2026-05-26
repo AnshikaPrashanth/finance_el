@@ -248,7 +248,45 @@ These values are normalized in `src/services/api.js` before sending to the backe
 
 ## Screenshots
 
-The full screenshot gallery is available in `screenshots/README.md`.
+The full screenshot gallery is available below, with the image files stored in the `screenshots/` directory.
+
+### Screenshot Gallery
+
+- [Screenshot 2026-05-26 220526](screenshots/Screenshot%202026-05-26%20220526.png)
+- [Screenshot 2026-05-26 220539](screenshots/Screenshot%202026-05-26%20220539.png)
+- [Screenshot 2026-05-26 220551](screenshots/Screenshot%202026-05-26%20220551.png)
+- [Screenshot 2026-05-26 220610](screenshots/Screenshot%202026-05-26%20220610.png)
+- [Screenshot 2026-05-26 220627](screenshots/Screenshot%202026-05-26%20220627.png)
+- [Screenshot 2026-05-26 220658](screenshots/Screenshot%202026-05-26%20220658.png)
+- [Screenshot 2026-05-26 220710](screenshots/Screenshot%202026-05-26%20220710.png)
+- [Screenshot 2026-05-26 220755](screenshots/Screenshot%202026-05-26%20220755.png)
+- [Screenshot 2026-05-26 220815](screenshots/Screenshot%202026-05-26%20220815.png)
+- [Screenshot 2026-05-26 220850](screenshots/Screenshot%202026-05-26%20220850.png)
+- [Screenshot 2026-05-26 220908](screenshots/Screenshot%202026-05-26%20220908.png)
+
+### Screenshot Preview
+
+![Screenshot 2026-05-26 220526](screenshots/Screenshot%202026-05-26%20220526.png)
+
+![Screenshot 2026-05-26 220539](screenshots/Screenshot%202026-05-26%20220539.png)
+
+![Screenshot 2026-05-26 220551](screenshots/Screenshot%202026-05-26%20220551.png)
+
+![Screenshot 2026-05-26 220610](screenshots/Screenshot%202026-05-26%20220610.png)
+
+![Screenshot 2026-05-26 220627](screenshots/Screenshot%202026-05-26%20220627.png)
+
+![Screenshot 2026-05-26 220658](screenshots/Screenshot%202026-05-26%20220658.png)
+
+![Screenshot 2026-05-26 220710](screenshots/Screenshot%202026-05-26%20220710.png)
+
+![Screenshot 2026-05-26 220755](screenshots/Screenshot%202026-05-26%20220755.png)
+
+![Screenshot 2026-05-26 220815](screenshots/Screenshot%202026-05-26%20220815.png)
+
+![Screenshot 2026-05-26 220850](screenshots/Screenshot%202026-05-26%20220850.png)
+
+![Screenshot 2026-05-26 220908](screenshots/Screenshot%202026-05-26%20220908.png)
 
 ## Notes
 
